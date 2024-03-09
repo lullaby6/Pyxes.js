@@ -135,6 +135,11 @@ class Camera {
         this.y += ((y - this.game.height/2) - this.y) / this.delay
     }
 
+    setPosition(x, y) {
+        this.x = x
+        this.y = y
+    }
+
     setZoom(zoom) {
         this.zoom = Math.max(this.minZoom, Math.min(this.maxZoom, zoom))
     }
@@ -328,16 +333,16 @@ class Game {
             this.ctx.scale(this.camera.zoom, this.camera.zoom);
             this.ctx.translate(-(this.camera.x), -(this.camera.y))
 
-            if (this.onUpdate && typeof this.onUpdate === 'function') this.onUpdate(this)
+            if (this.onUpdate && typeof this.onUpdate === 'function' && !this.pause) this.onUpdate(this)
             if (this.onRender && typeof this.onRender === 'function') this.onRender(this)
 
             const activeScene = this.getActiveScene()
-            if (activeScene.onUpdate && typeof activeScene.onUpdate === 'function') activeScene.onUpdate(activeScene)
+            if (activeScene.onUpdate && typeof activeScene.onUpdate === 'function' && !this.pause) activeScene.onUpdate(activeScene)
             if (activeScene.onRender && typeof activeScene.onRender === 'function') activeScene.onRender(activeScene)
 
             const gameObjects = activeScene.getGameObjects()
             Object.entries(gameObjects).forEach(([name, gameObject]) => {
-                if (gameObject.onUpdate && typeof gameObject.onUpdate === 'function') gameObject.onUpdate(gameObject)
+                if (gameObject.onUpdate && typeof gameObject.onUpdate === 'function' && !this.pause) gameObject.onUpdate(gameObject)
                 if (gameObject.onRender && typeof gameObject.onRender === 'function') gameObject.onRender(gameObject)
                 if (gameObject.render && typeof gameObject.render === 'function') gameObject.render()
                 
@@ -409,6 +414,12 @@ class Game {
 
     setPause(pause) {
         this.pause = pause
+
+        if (this.pause) {
+            this.customEvent('pause')
+        } else {
+            this.customEvent('resume')
+        }
     }
 
     togglePause() {
@@ -515,5 +526,19 @@ class Game {
 
     toggleFullscreen() {
         this.setFullscreen(!this.fullScreen)
+    }
+
+    customEvent(eventName) {
+        const eventMethodName = `on${eventName.charAt(0).toUpperCase() + eventName.slice(1).toLowerCase()}`
+
+        if (this[eventMethodName] && typeof this[eventMethodName] === 'function') this[eventMethodName](this)
+
+        const activeScene = this.getActiveScene()
+        if (activeScene[eventMethodName] && typeof activeScene[eventMethodName] === 'function') activeScene[eventMethodName](activeScene)
+
+        const gameObjects = activeScene.getGameObjects()
+        Object.values(gameObjects).forEach(gameObject => {
+            if (gameObject[eventMethodName] && typeof gameObject[eventMethodName] === 'function') gameObject[eventMethodName](gameObject)
+        })
     }
 }

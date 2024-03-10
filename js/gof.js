@@ -87,10 +87,10 @@ const game = new Game({
         if(event.key == 'f') current.setFullscreen(!current.fullScreen)
     },
     onPause: current => {
-        console.log('pause');
+        current.setCursorVisibility(true)
     },
     onResume: current => {
-        console.log('resume');
+        current.setCursorVisibility(false)
     }
 })
 

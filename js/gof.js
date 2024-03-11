@@ -85,8 +85,8 @@ const game = new Game({
 
     onKeydown: ({event, current}) => {
         if (event.key == 'p') current.togglePause()
-        if (event.key == 'r') current.resetScene()
-        if (event.key == 'f') current.setFullscreen(!current.fullScreen)
+        else if (event.key == 'r') current.resetScene()
+        else if (event.key == 'f') current.toggleFullscreen()
     },
 
     onPause: current => {

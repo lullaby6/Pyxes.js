@@ -1,4 +1,4 @@
-const mainScene = {
+const MainScene = {
     cellSize: 5,
     rows: 100,
     columns: 200,
@@ -78,14 +78,17 @@ const game = new Game({
     fps: 8,
     cursor: false,
     title: 'Game of Life - Pyxes',
+
     scenes: {
-        main: mainScene
+        main: MainScene
     },
+
     onKeydown: ({event, current}) => {
-        if(event.key == 'p') current.togglePause()
-        if(event.key == 'r') current.resetScene()
-        if(event.key == 'f') current.setFullscreen(!current.fullScreen)
+        if (event.key == 'p') current.togglePause()
+        if (event.key == 'r') current.resetScene()
+        if (event.key == 'f') current.setFullscreen(!current.fullScreen)
     },
+
     onPause: current => {
         current.setCursorVisibility(true)
     },

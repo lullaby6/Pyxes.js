@@ -70,7 +70,7 @@ const MainScene = {
         newHead.x = snakeHead.x + current.speedX
         newHead.y = snakeHead.y + current.speedY
 
-        current.removeGameObject(snakes[0].name)
+        current.removeGameObjectByName(snakes[0].name)
 
         if (snakes.length > 1) {
             snakes.forEach(snake => {
@@ -119,6 +119,7 @@ const MainScene = {
 const game = new Game({
     backgroundColor: '#FBFAFA',
     fps: 6,
+    limitFPS: true,
     cursor: false,
     title: 'Snake - Pyxes',
 

@@ -9,7 +9,7 @@ const MainScene = {
 
         current.board.forEach((row, rowIndex) => {
             row.forEach((col, colIndex) => {
-                if (randomItemFromArray([0, 1]) == 1){  
+                if (randomItemFromArray([0, 1]) == 1){
                     current.board[rowIndex][colIndex] = 1
                 }
             })
@@ -23,7 +23,7 @@ const MainScene = {
         current.board.forEach((row, rowIndex) => {
             row.forEach((col, colIndex) => {
                 let neighbors = 0
-                
+
                 new Array(-1, 0, 1).forEach(dr => {
                     new Array(-1, 0, 1).forEach(dc => {
                         const r = rowIndex + dr
@@ -32,10 +32,10 @@ const MainScene = {
                         if (
                             !(dr == 0 && dc == 0) &&
                             (rowIndex != dr && colIndex != dc) &&
-                            r >= 0 && 
-                            r < current.rows && 
-                            c >= 0 && 
-                            c < current.columns && 
+                            r >= 0 &&
+                            r < current.rows &&
+                            c >= 0 &&
+                            c < current.columns &&
                             current.board[r][c] == 1
                         ) {
                             neighbors += 1
@@ -76,6 +76,7 @@ const MainScene = {
 const game = new Game({
     backgroundColor: '#111',
     fps: 8,
+    limitFPS: true,
     cursor: false,
     title: 'Game of Life - Pyxes',
 

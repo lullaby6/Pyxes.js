@@ -745,15 +745,21 @@ class Game {
         document.title = this.title
     }
 
-    setSize(width, height){
-        this.width = width;
-        this.height = height;
-
-        this.cv.width = width;
-        this.cv.height = height;
-
+    setWidth(width) {
+        this.width = width
+        this.cv.width = width
         this.cv.style.width = `${width}px`
+    }
+
+    setHeight(height) {
+        this.height = height
+        this.cv.height = height
         this.cv.style.height = `${height}px`
+    }
+
+    setSize(width, height){
+        this.setWidth(width)
+        this.setHeight(height)
     }
 
     setBackgroundColor(backgroundColor){

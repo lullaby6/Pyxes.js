@@ -5,6 +5,11 @@ const Cube = {
         size: 1,
         color: '#000'
     },
+    size: {
+        min: 7.5,
+        max: 10
+    },
+    speedRange: 500,
 
     onLoad: current => {
         current.reset(current)
@@ -15,17 +20,19 @@ const Cube = {
 
         if (current.y > current.scene.game.height) current.scene.game.resetScene()
 
+        current.drawBorder(current)
+    },
+
+    drawBorder: current => {
         current.scene.game.ctx.fillStyle = current.border.color
 
         current.scene.game.ctx.fillRect(current.x - current.border.size, current.y - current.border.size, current.width + (current.border.size * 2), current.height + (current.border.size * 2))
     },
 
     reset: current => {
-        const size = randomIntFromInterval(current.scene.game.width/12.5, current.scene.game.width/7.5)
+        const size = randomIntFromInterval(current.scene.game.width/current.size.max, current.scene.game.width/current.size.min)
 
-        const range = Math.abs(500 - (current.scene.score * 2))
-
-        console.log(range);
+        const range = Math.abs(current.speedRange - (current.scene.score * 2))
 
         const speed = randomIntFromInterval(current.scene.game.height/range, current.scene.game.height/(range/2))
 
@@ -35,16 +42,18 @@ const Cube = {
 
         current.y = -size
         current.x = randomIntFromInterval(0, (current.scene.game.width - size))
+
+        if (current.x + size > current.scene.game.width) current.x = current.scene.game.width - size
     },
 
     onCurrentClick: ({current}) => {
         current.reset(current)
 
-        const cubesLength = current.scene.getGameObjectsByTag('cube').length
-
         current.scene.score += 1
 
-        const newCubesLength = parseInt(Math.max(1, current.scene.score / 5))
+        const cubesLength = current.scene.getGameObjectsByTag('cube').length
+
+        const newCubesLength = Math.min(current.scene.maxCubes, parseInt(Math.max(1, current.scene.score / 5)))
 
         if (newCubesLength > cubesLength) {
             for (let i = 0; i < newCubesLength - cubesLength; i++) {
@@ -56,6 +65,7 @@ const Cube = {
 
 const MainScene = {
     score: 0,
+    maxCubes: 5,
 
     onLoad: current => {
         current.instantGameObject(Cube)
